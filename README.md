@@ -141,7 +141,7 @@ before next step and You must login.
     
 ### STEP 13 initilise the frappe bench & install frappe latest version 
 
-    bench init frappe-bench --frappe-branch version-13
+    bench init frappe-bench --frappe-branch version-14
     
     cd frappe-bench/
     bench start
