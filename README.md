@@ -3,7 +3,7 @@
 
 ### Pre-requisites 
 
-      Python 3.6+
+      Python 3.10+
       Homebrew 3.6+
       Node.js 14
       Redis 5                                       (caching and real time updates)
@@ -148,38 +148,60 @@ before next step and You must login.
     
 ### STEP 14 create a site in frappe bench 
     
-    bench new-site site1.local
+    bench new-site site.localhost
         
 NOTE: If you face this type of issue.
 
     For key collation_server. Expected value utf8mb4_unicode_ci, found value utf8mb4_general_ci
     ================================================================================
-    Creation of your site - site11.locale failed because MariaDB is not properly
+    Creation of your site - site.localhost failed because MariaDB is not properly
     configured. If using version 10.2.x or earlier, make sure you use the
     the Barracuda storage engine.
     Please verify the settings above in MariaDB's my.cnf. Restart MariaDB. And
-    then run `bench new-site site1.locale` again.
+    then run `bench new-site site.localhost` again.
     
 then you have to go in mariadb shell and run this commands
 
-      SET GLOBAL collation_server = 'utf8mb4_unicode_ci';
+    `SET GLOBAL collation_server = 'utf8mb4_unicode_ci';`
  
 and restart the mariadb
 
-      brew services restart mariadb
+    `brew services restart mariadb`
 
 ### STEP 15 install ERPNext latest version in bench & site
 
-    bench get-app erpnext --branch version-13
+    bench get-app payments
+    bench get-app erpnext --branch version-14
     ###OR
-    bench get-app https://github.com/frappe/erpnext --branch version-13
+    bench get-app https://github.com/frappe/erpnext --branch version-14
 
-    bench --site site1.local install-app erpnext
+    bench --site site.localhost install-app erpnext
 
-    bench --site site1.local add-to-hosts
+    bench --site <site> install-app erpnext
+
+
+If you face such errors you can solve it by using the following commands.
+
+    Traceback (most recent call last):
+        File "apps/frappe/frappe/commands/site.py", line 413, in install_app
+          _install_app(app, verbose=context.verbose, force=force)
+        File "apps/frappe/frappe/installer.py", line 265, in install_app
+          install_app(required_app, verbose=verbose, force=force)
+        File "apps/frappe/frappe/installer.py", line 288, in install_app
+          add_module_defs(name, ignore_if_duplicate=force)
+        File "apps/frappe/frappe/installer.py", line 608, in add_module_defs
+          d.insert(ignore_permissions=True, ignore_if_duplicate=ignore_if_duplicate)
+        File "apps/frappe/frappe/model/document.py", line 268, in insert
+          self.db_insert(ignore_if_duplicate=ignore_if_duplicate)
+        File "apps/frappe/frappe/model/base_document.py", line 526, in db_insert
+          raise frappe.DuplicateEntryError(self.doctype, self.name, e)
+      frappe.exceptions.DuplicateEntryError: ('Module Def', 'Payments', IntegrityError(1062, "Duplicate entry 'Payments' for key 'PRIMARY'"))
+
+
+    bench --site site.localhost add-to-hosts
     
     bench start
     
 Your server will run on this host
 
-    http://site1.local:8000/
+    http://site.localhost:8000/
