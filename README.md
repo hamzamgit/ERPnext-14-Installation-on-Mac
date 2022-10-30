@@ -197,7 +197,9 @@ If you face such errors you can solve it by using the following commands.
           raise frappe.DuplicateEntryError(self.doctype, self.name, e)
       frappe.exceptions.DuplicateEntryError: ('Module Def', 'Payments', IntegrityError(1062, "Duplicate entry 'Payments' for key 'PRIMARY'"))
 
-
+    bench --site site.localhost reinstall
+    
+    
     bench --site site.localhost add-to-hosts
     
     bench start
